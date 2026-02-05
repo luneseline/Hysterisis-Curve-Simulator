@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedure - Hysteresis Curve Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script type="module" src="main.js"></script>
+    <main>
+        <div class="container">
+            <h1>Experimental Procedure</h1>
+
+            <div class="procedure-steps">
+                <h2>Step-by-Step Guide</h2>
+                <ol>
+                    <li>
+                        <strong>Select Magnetic Specimen:</strong>
+                        <p>Choose a material from the dropdown (e.g., Soft Iron, Silicon Steel) to define the magnetic
+                            properties of calculation.</p>
+                    </li>
+                    <li>
+                        <strong>Circuit Configuration:</strong>
+                        <p>Ensure the circuit is connected properly. The transformer primary is connected to the AC
+                            source via a rheostat (R1). The secondary is connected to the integration circuit (R2, C).
+                        </p>
+                    </li>
+                    <li>
+                        <strong>CRO Setup:</strong>
+                        <p>Set the CRO to <b>X-Y Mode</b>. Connect the voltage across the series resistor to the X-input
+                            (representing H) and the voltage across the capacitor to the Y-input (representing B).</p>
+                    </li>
+                    <li>
+                        <strong>Start Simulation:</strong>
+                        <p>Turn on the power supply using the Toggle Switch.</p>
+                    </li>
+                    <li>
+                        <strong>Adjust Parameters:</strong>
+                        <p>Vary the <b>Resistance</b> slider to change the current limited to the primary coil. Observe
+                            how the loop expands or contracts.</p>
+                        <p>Change the <b>Frequency</b> to see its effect on the loop area and loss.</p>
+                    </li>
+                    <li>
+                        <strong>Observation:</strong>
+                        <p>Observe the B-H Curve on the CRO screen. Note its Retentivity (intercept on Y-axis) and
+                            Coercivity (intercept on X-axis).</p>
+                    </li>
+                    <li>
+                        <strong>Record Readings:</strong>
+                        <p>Click the <b>"Add Reading"</b> button to record the current Material, Resistance, Frequency,
+                            and Calculated Loss into the Observation Table.</p>
+                    </li>
+                    <li>
+                        <strong>Calculate Loss:</strong>
+                        <p>The system automatically calculates the area of the loop and computes the Hysteresis Loss
+                            using the formula.</p>
+                    </li>
+                </ol>
+            </div>
+
+            <div style="margin-top: 2rem; text-align: center;">
+                <a href="simulation.html" class="btn">Proceed to Simulation</a>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
