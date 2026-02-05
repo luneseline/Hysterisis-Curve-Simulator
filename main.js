@@ -34,7 +34,7 @@ function injectNavigation() {
 
     // Add Footer
     const footer = document.createElement('footer');
-    footer.innerHTML = `&copy; ${new Date().getFullYear()} CICLABS - Virtual Basic Science & Engineering Labs`;
+    footer.innerHTML = `&copy; ${new Date().getFullYear()} CICLABS - Virtual Physics Simulation`;
     document.body.append(footer);
 }
 

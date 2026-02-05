@@ -4,10 +4,10 @@
 
 // Configuration for materials
 const MATERIALS = {
-    soft_iron: { name: "Soft Iron", coercivity: 0.2, retentivity: 0.8, saturation: 1.0, color: "#4fc3f7" },
-    steel: { name: "Hard Steel", coercivity: 0.6, retentivity: 0.6, saturation: 0.9, color: "#ffb74d" },
-    cast_iron: { name: "Cast Iron", coercivity: 0.5, retentivity: 0.4, saturation: 0.7, color: "#a1887f" },
-    ferrite: { name: "Ferrite", coercivity: 0.1, retentivity: 0.3, saturation: 0.5, color: "#e57373" }
+    soft_iron: { name: "Soft Iron", coercivity: 0.1, retentivity: 0.3, saturation: 0.95, color: "#4fc3f7" },
+    steel: { name: "Hard Steel", coercivity: 0.65, retentivity: 0.85, saturation: 0.7, color: "#ffb74d" },
+    cast_iron: { name: "Cast Iron", coercivity: 0.25, retentivity: 0.45, saturation: 0.8, color: "#a1887f" },
+    ferrite: { name: "Ferrite", coercivity: 0.9, retentivity: 0.75, saturation: 0.6, color: "#e57373" }
 };
 
 // State
