@@ -99,6 +99,7 @@ function setupListeners() {
         // Reset Simulation State
         state.time = 0;
         state.isOn = false;
+        state.prankTime = null; // Reset prank
         powerBtn.textContent = "OFF";
         powerBtn.style.backgroundColor = "#C62828";
         addReadingBtn.disabled = true;
@@ -283,6 +284,30 @@ function animate(timestamp) {
         ctx.arc(px, py, 5, 0, Math.PI * 2);
         ctx.fill();
     }
+
+    // Prank Logic: Show 'Bauni' after random time (5-10s)
+    if (!state.prankTime) {
+        // Set trigger time between 5000ms and 10000ms from now
+        state.prankTime = performance.now() + (Math.random() * 5000 + 5000);
+    }
+
+    // Check if we should show it
+    if (timestamp > state.prankTime) {
+        ctx.save();
+        ctx.font = "bold 40px 'Comic Sans MS', 'Chalkboard SE', sans-serif";
+        ctx.fillStyle = "#FF69B4"; // HotPink
+        ctx.textAlign = "center";
+        ctx.shadowColor = "#FFF";
+        ctx.shadowBlur = 15;
+        // Pulsating effect
+        const scale = 1 + Math.sin(timestamp / 200) * 0.1;
+        ctx.translate(cx, cy);
+        ctx.scale(scale, scale);
+        ctx.fillText("Bauni", 0, -100); // Draw slightly above center
+        ctx.restore();
+    }
+
+
 
     // Update stats once per frame
     updateCalculation(points);
