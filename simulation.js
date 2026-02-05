@@ -272,7 +272,7 @@ function animate(timestamp) {
     }
 
     // Update stats once per frame
-    updateCalculation();
+    updateCalculation(points);
 
     animationId = requestAnimationFrame(animate);
 }
