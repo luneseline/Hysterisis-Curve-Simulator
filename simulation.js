@@ -118,21 +118,18 @@ function togglePower() {
     }
 }
 
+// Generate the loop points
 function getLoopData() {
     const mat = MATERIALS[state.material];
 
-    // Physics Simulation Heuristic
-    // H (X-axis) is proportional to Current I = V / R
-    // B (Y-axis) follows H but with lag/hysteresis
-
-    // Max H based on Voltage and Resistance
-    // H_max ~ V / R
+    // Physics: H is proportional to Current I = V / R
+    // We assume H = (V/R) * scale_factor
     const h_amp = (state.voltage / state.resistance) * 2.0;
-    // Display normalization to avoid pixel collapse
-    const H_DISPLAY_MIN = 0.2;  // minimum visible sweep
-    const h_disp = Math.max(h_amp, H_DISPLAY_MIN);
 
-    // Let's create a set of points for one cycle
+    // For display, we ensure it doesn't get too small to see
+    const H_DISPLAY_MIN = 0.2;
+    const h_disp_amp = Math.max(h_amp, H_DISPLAY_MIN);
+
     const points = [];
     const steps = 100;
 
@@ -141,42 +138,48 @@ function getLoopData() {
         let sinT = Math.sin(t);
         let cosT = Math.cos(t);
 
-        // H (Field Intensity)
-        let x_phys = h_amp * sinT;
-        let x_disp = h_disp * sinT;
+        // Physical H (Actual value)
+        let h_phys = h_amp * sinT;
 
-        // Dynamic coercivity affected by Amplitude (Coercivity should scale with available magnetizing force)
+        // Display H (Visual value)
+        let h_disp_val = h_disp_amp * sinT;
+
+        // Dynamic coercivity:
+        // If the field is weak, coercivity drops effectively
         let eff_coercivity = mat.coercivity * (h_amp / (h_amp + mat.coercivity));
 
-        // Continuous smooth lag function to avoid vertical jumps at tips
-        // We use cos(t) to modulate the lag, ensuring the loop closes naturally at saturation
+        // Lag function
         let lag = eff_coercivity * cosT;
 
-        // Magnetic Saturation
-        let saturation = mat.saturation;
-
-        // B calculation using tanh for saturation soft-clipping
+        // B calculation (tanh saturation)
         // y = Saturation * tanh( (x - lag) / softness )
         let softness = mat.softness || 1.0;
-        let y = saturation * Math.tanh(
-            (x_phys - lag) / softness
-        );
 
-        points.push({ x: x_disp, y });
+        // Calculate B based on PHYSICAL H
+        // (Display B will track this directly since B isn't clamped like H)
+        let b_val = mat.saturation * Math.tanh((h_phys - lag) / softness);
+
+        // Store both coordinate sets
+        points.push({
+            phys: { x: h_phys, y: b_val },
+            disp: { x: h_disp_val, y: b_val }
+        });
     }
 
     return points;
 }
 
-
-
 function calculateArea(points) {
-    // Shoelace formula
+    // Shoelace formula on PHYSICAL coordinates
     let area = 0;
     for (let i = 0; i < points.length; i++) {
         let j = (i + 1) % points.length;
-        area += points[i].x * points[j].y;
-        area -= points[j].x * points[i].y;
+
+        let p1 = points[i].phys;
+        let p2 = points[j].phys;
+
+        area += p1.x * p2.y;
+        area -= p2.x * p1.y;
     }
     return Math.abs(area) / 2;
 }
@@ -187,15 +190,11 @@ function updateCalculation() {
     const points = getLoopData();
     const rawArea = calculateArea(points);
 
-    // Scale area to "Physics Units"
-    // Heuristic scaling for display
+    // Scale area to reasonable units
     const area = rawArea * 10;
 
-    // Hysteresis Loss Formula: Loss = Area (conceptually per volume)
-    // P = f * Area * Volume_const
-    // Let's assume Volume factor = 1 for simplicity or just output "Energy per cycle"
-
-    const loss = area * state.frequency * 0.01; // Scale factor
+    // Power Loss = V * f * Area
+    const loss = area * state.frequency * 0.01;
 
     loopAreaDisplay.textContent = area.toFixed(2);
     lossDisplay.textContent = loss.toFixed(2);
@@ -204,7 +203,7 @@ function updateCalculation() {
 }
 
 function drawGrid() {
-    // CSS handles the grid background
+    // grid is handled by css background
 }
 
 function animate() {
@@ -228,8 +227,9 @@ function animate() {
 
     points.forEach((p, i) => {
         // Map simulation units to pixels
-        let px = cx + p.x * scaleX;
-        let py = cy - p.y * scaleY; // Y inverted for canvas
+        // using p.disp because this is for VISUALS
+        let px = cx + p.disp.x * scaleX;
+        let py = cy - p.disp.y * scaleY; // Y inverted for canvas
 
         if (i === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
@@ -248,8 +248,8 @@ function animate() {
     let p = points[t_idx];
 
     if (p) {
-        let px = cx + p.x * scaleX;
-        let py = cy - p.y * scaleY;
+        let px = cx + p.disp.x * scaleX;
+        let py = cy - p.disp.y * scaleY;
 
         ctx.fillStyle = '#fff';
         ctx.beginPath();
