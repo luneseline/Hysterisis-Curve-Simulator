@@ -184,11 +184,12 @@ function calculateArea(points) {
     return Math.abs(area) / 2;
 }
 
-function updateCalculation() {
+function updateCalculation(points) {
     if (!state.isOn) return;
 
-    const points = getLoopData();
-    const rawArea = calculateArea(points);
+    // Use passed points or generate if called externally
+    const pts = points || getLoopData();
+    const rawArea = calculateArea(pts);
 
     // Scale area to reasonable units
     const area = rawArea * 10;
@@ -202,12 +203,21 @@ function updateCalculation() {
     return { area, loss };
 }
 
-function drawGrid() {
-    // grid is handled by css background
-}
+// Remove empty grid function
+// function drawGrid() {}
 
-function animate() {
-    if (!state.isOn) return;
+// Animation Loop
+let lastTime = 0;
+
+function animate(timestamp) {
+    if (!state.isOn) {
+        lastTime = 0;
+        return;
+    }
+
+    if (!lastTime) lastTime = timestamp;
+    const dt = (timestamp - lastTime) / 1000; // Delta time in seconds
+    lastTime = timestamp;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -216,20 +226,20 @@ function animate() {
     const cx = width / 2;
     const cy = height / 2;
 
+    // Optimize: In a real app, we'd cache points and only regen if state changes.
+    // For now, regen is fine, but we organize it better.
     const points = getLoopData();
-    const mat = MATERIALS[state.material];
 
+    // Draw Beam Trace
     ctx.beginPath();
-    ctx.strokeStyle = '#F2CF2A'; // Beam color (Amber/Yellow)
+    ctx.strokeStyle = '#F2CF2A'; // Beam color
     ctx.lineWidth = 3;
     ctx.shadowBlur = 10;
     ctx.shadowColor = '#F2CF2A';
 
     points.forEach((p, i) => {
-        // Map simulation units to pixels
-        // using p.disp because this is for VISUALS
         let px = cx + p.disp.x * scaleX;
-        let py = cy - p.disp.y * scaleY; // Y inverted for canvas
+        let py = cy - p.disp.y * scaleY;
 
         if (i === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
@@ -237,14 +247,18 @@ function animate() {
 
     ctx.closePath();
     ctx.stroke();
-
-    // Reset shadow for text
     ctx.shadowBlur = 0;
 
-    // Draw Current Point (the electron beam dot)
-    // Moving based on time
-    state.time += (state.frequency / 60) * 0.1; // Animation speed relative to freq
-    let t_idx = Math.floor((state.time % (2 * Math.PI)) / (2 * Math.PI) * points.length) % points.length;
+    // Update Phase/Time
+    // Speed: 1 cycle per (1/freq) seconds
+    // Phase increment = (dt * freq) * 2PI
+    const phaseInc = dt * state.frequency * 2 * Math.PI;
+    state.time += phaseInc;
+
+    // Draw Electron Dot
+    // Find index based on current phase (0 to 2PI)
+    let phase = state.time % (2 * Math.PI);
+    let t_idx = Math.floor((phase / (2 * Math.PI)) * points.length) % points.length;
     let p = points[t_idx];
 
     if (p) {
@@ -257,7 +271,8 @@ function animate() {
         ctx.fill();
     }
 
-    updateCalculation(); // Update numbers live
+    // Update stats once per frame
+    updateCalculation();
 
     animationId = requestAnimationFrame(animate);
 }
