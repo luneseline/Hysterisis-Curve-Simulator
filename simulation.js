@@ -93,7 +93,21 @@ function setupListeners() {
 
     addReadingBtn.addEventListener('click', addReading);
     clearTableBtn.addEventListener('click', () => {
+        // Clear Data
         obsTableBody.innerHTML = '';
+
+        // Reset Simulation State
+        state.time = 0;
+        state.isOn = false;
+        powerBtn.textContent = "OFF";
+        powerBtn.style.backgroundColor = "#C62828";
+        addReadingBtn.disabled = true;
+
+        // Clear Canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Optional: Reset parameters to default? 
+        // Let's keep parameters as is, just stop and clear data is more standard "Correction" behavior.
     });
 
     window.addEventListener('resize', resizeCanvas);
@@ -203,8 +217,7 @@ function updateCalculation(points) {
     return { area, loss };
 }
 
-// Remove empty grid function
-// function drawGrid() {}
+
 
 // Animation Loop
 let lastTime = 0;
