@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* CICLABS Palette */
+  --primary: #7F5836;
+  /* Medium Brown */
+  --primary-dark: #443025;
+  /* Dark Brown */
+  --primary-light: #AA7F66;
+  /* Light Brown */
+  --accent: #EC9C9D;
+  /* Pinkish */
+  --highlight: #F2CF2A;
+  /* Yellow */
+
+  --bg-color: #fdfbf7;
+  /* Off-white warm background */
+  --text-main: #443025;
+  --text-light: #7F5836;
+  --card-bg: #FFFFFF;
+  --border: #AA7F66;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-primary-dark antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom styles from original project */
+.btn {
+  @apply inline-block bg-primary text-white px-6 py-3 rounded-md font-semibold transition-all border-b-4 border-primary-dark hover:bg-primary-light hover:-translate-y-0.5 active:translate-y-0.5 active:border-b;
+}
+
+.btn-secondary {
+  @apply bg-primary-light border-primary-dark;
+}
+
+.cro-display {
+  @apply bg-[#1a1512] border-[6px] border-[#5d4037] rounded-xl aspect-square relative overflow-hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+.cro-grid {
+  @apply absolute inset-0 pointer-events-none z-10;
+  background-image:
+    linear-gradient(rgba(236, 156, 157, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236, 156, 157, 0.2) 1px, transparent 1px);
+  background-size: 10% 10%;
+}
+
+.observation-table {
+  @apply w-full border-collapse mt-4 text-sm;
+}
+
+.observation-table th {
+  @apply bg-primary text-white p-3 border border-primary-light text-center;
+}
+
+.observation-table td {
+  @apply p-3 border border-primary-light text-center;
+}
+
+.observation-table tr:nth-child(even) {
+  @apply bg-primary-light/10;
+}
