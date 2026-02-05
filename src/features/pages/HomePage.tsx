@@ -188,7 +188,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </motion.div>
 
                 {/* Footer Section */}
-                <div className="border-t border-white/5 pt-12 text-center pb-8">
+                <div className="border-t border-white/5 pt-12 text-center pb-8 flex flex-col items-center gap-6">
+                    <div className="flex items-center gap-4">
+                        <div className="w-14 h-14 overflow-hidden rounded-full shrink-0">
+                            <img src="/logo.png" alt="CIC" className="h-14 object-cover object-left" />
+                        </div>
+                        <div className="text-left border-l border-white/20 pl-4">
+                            <div className="text-lg font-semibold text-white">Cluster Innovation Centre</div>
+                            <div className="text-sm text-gray-400">University of Delhi</div>
+                        </div>
+                    </div>
                     <p className="text-gray-500 text-sm">
                         Designed for <span className="text-gray-300">Advanced Physics Labs</span> • CIClabs 2026
                     </p>

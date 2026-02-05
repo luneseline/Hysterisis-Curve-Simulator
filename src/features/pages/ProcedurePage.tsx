@@ -9,6 +9,16 @@ export const ProcedurePage: React.FC = () => {
             </h2>
 
             <div className="space-y-6 max-w-4xl">
+                {/* Circuit Setup Diagram */}
+                <div className="bg-black/20 p-4 rounded-xl border border-white/10 mb-6">
+                    <h3 className="text-lg font-bold text-white mb-3">Experimental Setup</h3>
+                    <img
+                        src="/setup.png"
+                        alt="Hysteresis Experiment Circuit Setup"
+                        className="w-full max-w-lg mx-auto rounded-lg"
+                    />
+                </div>
+
                 {[
                     { title: "Select Magnetic Specimen", desc: "Choose a material from the dropdown (e.g., Soft Iron, Silicon Steel) to define the magnetic properties." },
                     { title: "Circuit Configuration", desc: "The transformer primary connects to the AC source via a rheostat (R1). The secondary connects to the integration circuit (R2, C)." },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, Zap, Activity } from 'lucide-react';
+import { GraduationCap, Zap } from 'lucide-react';
 
 export const TheoryPage: React.FC = () => {
     return (
@@ -35,13 +35,13 @@ export const TheoryPage: React.FC = () => {
                             </ul>
                         </div>
 
-                        {/* Interactive-style diagram placeholder */}
-                        <div className="bg-white/5 p-4 rounded-lg flex items-center justify-center border border-white/10 min-h-[200px] relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"></div>
-                            <div className="text-center z-10">
-                                <Activity className="w-12 h-12 text-primary mx-auto mb-2 opacity-80" />
-                                <div className="text-xs text-gray-500 font-mono">Refer to Simulation Tab<br />for Real-time B-H Curve</div>
-                            </div>
+                        {/* B-H Curve Diagram */}
+                        <div className="bg-black/20 p-4 rounded-lg border border-white/10 relative overflow-hidden group">
+                            <img
+                                src="/hysteresis.png"
+                                alt="B-H Hysteresis Loop Diagram"
+                                className="w-full h-auto rounded-lg opacity-90 group-hover:opacity-100 transition-opacity"
+                            />
                         </div>
                     </div>
                 </section>
